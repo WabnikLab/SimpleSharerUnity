@@ -1,0 +1,27 @@
+﻿
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+
+//variables
+RWStructuredBuffer<float3> Position;
+uniform float Time;
+
+double SlowMathFunction(double n)
+    {
+        double result = 0;
+        for (int i = 1; i <= n; i++)
+        {
+            result += atan(tan(i));
+        }
+        return result;
+    }
+
+
+
+[numthreads(512,2,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    SlowMathFunction(100);
+    Position[id.x] = float3(Position[id.x][0]-0.01, Position[id.x][1], Position[id.x][2]);
+}
